@@ -5,10 +5,11 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
-from apps.students.models import Student
-
 from .forms import InvoiceItemFormset, InvoiceReceiptFormSet, Invoices
 from .models import Invoice, InvoiceItem, Receipt
+
+from apps.students.models import Student
+from django.db.models import Sum
 
 
 class InvoiceListView(LoginRequiredMixin, ListView):
@@ -119,3 +120,22 @@ class ReceiptDeleteView(LoginRequiredMixin, DeleteView):
 @login_required
 def bulk_invoice(request):
     return render(request, "finance/bulk_invoice.html")
+
+@login_required
+def fees_report_view(request):
+    report = Invoice.objects.all()
+    invoices = Invoice.objects.all().count()
+    total_students = Student.objects.all().count()
+    total_payable = InvoiceItem.objects.all().aggregate(total=Sum("amount"))['total']
+    total_paid = Receipt.objects.all().aggregate(total=Sum("amount_paid"))['total']
+    total_balance = total_payable - total_paid
+    return render(request, "finance/fees_report.html",
+                  {"reports": report,
+                   "total_students": total_students,
+                   "total_payable": total_payable,
+                   "total_paid": total_paid,
+                   "total_balance": total_balance,
+                   "invoices": invoices}
+                  )
+
+

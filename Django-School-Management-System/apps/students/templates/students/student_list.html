@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
-{% block title %}Students{% endblock title %}
+{% block heading_title %} <title>Tilina Schools | Students List</title> {% endblock heading_title %}
+{% block title %} Students List {% endblock title %}
 
 {% block breadcrumb %}
 <a class="btn btn-primary" href="{% url 'student-create' %}"><i
@@ -18,7 +19,6 @@
           <th>Fullname</th>
           <th>Current Class</th>
           <th>Gender</th>
-          <th>Mobile Phone Number</th>
           <th>Status</th>
         </tr>
       </thead>
@@ -30,7 +30,6 @@
             <td>{{ student.last_name}} {{student.first_name }} {{student.middle_name }}</td>
             <td>{{ student.current_class}}</td>
             <td>{{ student.get_gender_display}}</td>
-            <td>{{ student.parent_mobile_number}}</td>
             <td>{{ student.get_current_status_display}}</td>
           </tr>
         {% endfor %}
@@ -42,9 +41,17 @@
 
 
 {% block morejs %}
-<script>
-  $('#studenttable').DataTable({
-  });
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#studenttable').DataTable( {
+        dom: 'Blfrtip',
+        "lengthMenu": [[10, 25, 50, 100, 200, 1000, -1], [10, 25, 50, 100, 200, 1000, "All"]],
+        buttons: [
+            'excel', 'pdf', 'print'
+        ]
+
+    } );
+} );
 </script>
 
 {% endblock morejs %}

@@ -26,7 +26,9 @@ SECRET_KEY = "__$1ud47e&nyso5h5o3fwnqu4+hfqcply9h$k*h2s34)hn5@nc"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost',
+                 '127.0.0.1',
+                 'https://tilina-fms.herokuapp.com']
 
 
 # Application definition
@@ -85,38 +87,17 @@ WSGI_APPLICATION = "school_app.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'TilinaDB',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-    }
-}
-"""
-DATABASES = {
-
-    'default': {
-
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-
-        'NAME': ‘<db_name>’,
-
-        'USER': '<db_username>',
-
-        'PASSWORD': '<password>',
-
-        'HOST': '<db_hostname_or_ip>',
-
-        'PORT': '<db_port>',
-
+        'NAME': 'TilinaDB',
+        'USER': 'postgres',
+        'PASSWORD': '1234',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
-
 }
-"""
+
 
 
 # Password validation

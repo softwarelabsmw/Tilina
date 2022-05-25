@@ -1,30 +1,129 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 
+{% block heading_title %}
+
+{% if object %}
+ <title>Tilina Schools | Update Student </title>
+{% else %}
+
+ <title>Tilina Schools | New Student </title>
+{% endif %}
+
+{% endblock heading_title %}
 
 {% block title %}
 
-  {% if object %}
-    Update {{ object }}
-  {% else %}
-    Add new student
-  {% endif %}
+{% if object %}
+
+Update Student {{ object }}
+{% else %}
+Add New Student
+{% endif %}
 
 {% endblock title %}
 
 
 {% block content %}
 
-<form action="" method="POST" enctype="multipart/form-data">
+<form method="POST" enctype="multipart/form-data">
   {% csrf_token %}
 
-  {% include 'corecode/form_snippet.html' %}
+  <div class="row">
+    <div class="col-sm-6">
+        <h2>STUDENT DETAILS</h2>
+      {% for field in form %}
+      <div class="form-group row">
+        <label class="col col-form-label" for="{{ field.auto_id }}">
+          {{ field.label }}
+          {% for error in field.errors %}
+          <small id="{{ field.auto_id }}" class="text-danger">{{ error }}</small>
+          {% endfor %}
+        </label>
+        <div class="col">
+          {{ field | add_class:"form-control"}}
+          {% if field.help_text %}
+          <small>{{ field.help_text|safe }}</small>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="col-lg-6 callout callout-info">
+      {{ guardians.management_form }}
+        <div class="text-center"><h2>GUARDIAN DETAILS</h2></div>
+      {% for guardian in guardians %}
+      <div class="form-group guardians-group">
+        {{ guardian.id}}
+        <div class="form-row">
+            <div class="col"><strong>Full Name</strong>{{ guardian.full_name | add_class:"form-control"}}</div>
+            <div class="col"><strong>Gender</strong>{{ guardian.gender | add_class:"form-control"}}</div>
+        </div>
+        <div class="form-row">
+            <div class="col"><strong>Relationship Type</strong>{{ guardian.relation | add_class:"form-control"}}</div>
+            <div class="col"><strong>Occupation</strong>{{ guardian.occupation | add_class:"form-control"}}</div>
+        </div>
+        <div class="form-row">
+            <div class="col"><strong>Mobile Number</strong> {{ guardian.mobile_number | add_class:"form-control"}}</div>
+            <div class="col"><strong>Email</strong> {{ guardian.email | add_class:"form-control"}}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
 
   {% if object %}
-    <input type="submit" class="btn btn-primary" value="Update Record">
+    <h3>GUARDIANS</h3>
+    <table class="table table-sm">
+      {{ guardians.management_form }}
+      <thead class="thead-light">
+        <tr>
+          <th>Name</th>
+          <th>Gender</th>
+          <th>Relation</th>
+          <th>Mobile</th>
+          <th>Email</th>
+          <th>Occupation</th>
+          <th><i class="fa fa-trash"></i></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for guardian in guardians %}
+        {% for hidden in guardian.hidden_fields %}
+        {{ hidden }}
+        {% endfor %}
+        <tr>
+          {% for field in guardian.visible_fields %}
+          <td>{{ field | add_class:"form-control form-control-sm"}}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+  {% endif %}
+
+  {% if object %}
+  <input type="submit" class="btn btn-block btn-primary" value="Update Record">
   {% else %}
-    <input type="submit" class="btn btn-primary" value="Add new student">
+  <input type="submit" class="btn btn-block btn-success" value="Save Record">
   {% endif %}
 </form>
 
+<hr>
+
 
 {% endblock content %}
+
+{% block morejs %}
+<script>
+  $(".guardians-group").formset(
+    {
+      prefix: '{{ guardians.prefix }}',
+      deleteText: "<br> <div class='btn btn-danger btn-circle'><i class='fas fa-trash'></i> Remove</div>",
+      addText: "<div class='btn btn-success btn-circle'><i class='fas fa-plus'></i> Add New</div>"
+    }
+  )
+</script>
+{% endblock morejs %}
