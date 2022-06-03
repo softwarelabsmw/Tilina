@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block heading_title %} <title>Tilina Schools | Fees Report</title> {% endblock heading_title %}
+{% block title %} Student Fees Report {% endblock title %}
+
+{% block breadcrumb %}
+<a class="btn btn-primary" href="{% url 'invoice-create' %}"><i
+    class="fas fa-plus"></i> New Invoice</a>
+<a class="btn btn-primary" href="{% url 'bulk-invoice' %}"><i
+    class="fas fa-upload"></i> Bulk Invoice</a>
+{% endblock breadcrumb %}
+
+{% block content %}
+  <div class="table-responsive">
+    <table id="reporttable" class="table table-bordered table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th>S/N</th>
+          <th>Student</th>
+          <th>Session-Term</th>
+          <th>Class</th>
+          <th>Total Fees(MK)</th>
+          <th>Paid Fees(MK)</th>
+          <th>Balance(MK)</th>
+          <th>Invoice Status</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for report in reports %}
+          <tr class='clickable-row' data-href="{% url 'invoice-detail' report.id %}">
+            <td>{{ forloop.counter}}</td>
+            <td>{{ report}}</td>
+            <td>{{ report.session}}-{{ report.term}}</td>
+            <td>{{ report.student.current_class}}</td>
+            <td>{{ report.total_amount_payable | intcomma }}</td>
+            <td>{{ report.total_amount_paid | intcomma }}</td>
+            <td>{{ report.balance | intcomma }}</td>
+            <td>{{ report.status}}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+        <tfoot>
+          <tr class="text-white bg-dark">
+            <td >Totals: </td>
+            <td>{{invoices}} Invoices of {{total_students}} students </td>
+            <td></td>
+            <td></td>
+            <td>MK {{total_payable | intcomma }}</td>
+            <td>MK {{total_paid | intcomma }}</td>
+            <td>MK {{total_balance | intcomma }}</td>
+            <td></td>
+          </tr>
+        </tfoot>
+    </table>
+  </div>
+{% endblock content %}
+
+
+{% block morejs %}
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#reporttable').DataTable( {
+        dom: 'Blfrtip',
+        "lengthMenu": [[10, 25, 50, 100, 200, 1000, -1], [10, 25, 50, 100, 200, 1000, "All"]],
+        buttons: [
+            'excel', 'pdf', 'print'
+        ]
+
+    } );
+} );
+</script>
+
+{% endblock morejs %}

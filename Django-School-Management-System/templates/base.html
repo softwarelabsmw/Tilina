@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,15 +56,23 @@
         <!-- Notifications Dropdown Menu -->
         <li class="nav-item dropdown">
           <a class="nav-link" data-toggle="dropdown" href="#">
-            <i class="far fa-user"></i>
+            <i class="fas fa-user"></i>
           </a>
           <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
             <a href="#" class="dropdown-item">
-              <i class="fas fa-user mr-2"></i> Profile
+              <i class="fas fa-user mr-2"></i>{{ user.username }} : {{ user.email }}
             </a>
             <div class="dropdown-divider"></div>
+            <a href="{% url 'password_change' %}" class="dropdown-item">
+              <i class="fas fa-key"></i> Change Password
+            </a>
+             <div class="dropdown-divider"></div>
+            <a href="{% url 'password_reset' %}" class="dropdown-item">
+              <i class="fas fa-lock"></i> Reset Password
+            </a>
+             <div class="dropdown-divider"></div>
             <a href="{% url 'logout' %}" class="dropdown-item">
-              <i class="fas fa-sign-out"></i> Sign out
+              <i class="fas fa-sign-out-alt"></i> Sign Out
             </a>
           </div>
         </li>
@@ -80,8 +87,8 @@
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
-      <a href="{% url 'home' %}" class="brand-link">Tilina Schools</a>
-
+      <a href="{% url 'home' %}" class="brand-link"><img  src="{% static 'dist/img/logo.png' %}" alt="tilina-logo" style="width: 100px; margin: auto; display: inline;">
+Tilina Schools</a>
       <!-- Sidebar -->
       <div class="sidebar">
 

@@ -47,7 +47,12 @@ INSTALLED_APPS = [
     "apps.staffs",
     "apps.finance",
     "apps.result",
+
+    'crispy_forms',
 ]
+
+# Setting for crispy forms i.e. use bootstrap3 package
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -198,3 +203,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())
+
+# Email Backend setting i.e. Where to send an email for the users
+# Send them to console for development purpose only
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
